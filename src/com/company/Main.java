@@ -149,7 +149,8 @@ public class Main {
             int salary = dude.getSalary();
 
             String info = "Employee{" +
-                    "firstName='" + firstName + '\'' +
+                    "id=" + dude.getId() +
+                    ", firstName='" + firstName + '\'' +
                     ", middleName='" + middleName + '\'' +
                     ", lastName='" + lastName + '\'' +
                     ", salary=" + salary +
