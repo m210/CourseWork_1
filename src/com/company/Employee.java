@@ -3,6 +3,7 @@ package com.company;
 public class Employee {
     private String firstName, middleName, lastName;
     private int salary, department;
+    private int id;
 
     public Employee(String firstName, String middleName, String lastName, int salary, int department) {
         this.firstName = firstName;
@@ -11,11 +12,15 @@ public class Employee {
         this.salary = salary;
         this.department = department;
 
-        Main.id++;
+        this.id = Main.id++;
     }
 
     public int getSalary() {
         return salary;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public int getDepartment() {
@@ -32,6 +37,10 @@ public class Employee {
 
     public String getLastName() {
         return lastName;
+    }
+
+    public String getFullName() {
+        return lastName + " " + middleName + " " + firstName;
     }
 
     public void setSalary(int salary) {

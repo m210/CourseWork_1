@@ -28,9 +28,27 @@ public class Main {
 
         System.out.println("Средняя зарплата в месяц: " +  getAverageSalary(list));
 
-        String[] names = getLastNames(list);
+        String[] names = getFullNames();
         for(String n : names)
             System.out.println(n);
+
+        indexSalary(list, 10);
+
+        System.out.println("Сумма затрат на зарплаты в месяц по отделу: " + getSalariesSumInDep(1));
+
+        System.out.println("Минимальная зарплата в месяц по отделу: " + getMinimumSalaryInDep(1));
+
+        System.out.println("Максимальная зарплата в месяц по отделу: " + getMaximumSalaryInDep(1));
+
+        System.out.println("Средняя зарплата в месяц по отделу: " +  getAverageSalaryInDep(1));
+
+        indexSalaryInDep( 2, -10);
+
+        printEmployeesInfo(1);
+
+        printEmployeesWithSalaryLess(10000);
+
+        printEmployeesWithSalaryBigger(20000);
     }
 
     public static void printEmployees(Employee list[]) {
@@ -70,11 +88,89 @@ public class Main {
         return getSalariesSum(list) / (float) list.length;
     }
 
-    public static String[] getLastNames(Employee list[]) {
+    public static String[] getFullNames() {
         String[] names = new String[list.length];
         for (int i = 0; i < list.length; i++) {
-            names[i] = list[i].getLastName() + " "  + list[i].getMiddleName() + " " + list[i].getFirstName();
+            names[i] = list[i].getFullName();
         }
         return names;
+    }
+
+    public static void indexSalary(Employee list[], int percent) {
+        for(Employee dude : list) {
+            int salary = dude.getSalary();
+            salary += salary * (percent) / 100;
+            dude.setSalary(salary);
+        }
+    }
+
+    public static Employee[] getDudes(Employee list[], int department) {
+        int size = 0;
+        for(Employee dude : list) {
+            if(dude.getDepartment() == department)
+                size++;
+        }
+
+        int j = 0;
+        Employee[] dudes = new Employee[size];
+        for(Employee dude : list) {
+            if(dude.getDepartment() == department)
+                dudes[j++] = dude;
+        }
+
+        return dudes;
+    }
+
+    public static int getMinimumSalaryInDep(int department) {
+        return getMinimumSalary(getDudes(list, department));
+    }
+
+    public static int getMaximumSalaryInDep(int department) {
+        return getMaximumSalary(getDudes(list, department));
+    }
+
+    public static float getAverageSalaryInDep(int department) {
+        return getAverageSalary(getDudes(list, department));
+    }
+
+    public static int getSalariesSumInDep(int department) {
+        return getSalariesSum(getDudes(list, department));
+    }
+
+    public static void indexSalaryInDep(int department, int percent) {
+        indexSalary(getDudes(list, department), percent);
+    }
+
+    public static void printEmployeesInfo(int department) {
+        for(Employee dude : getDudes(list, department)) {
+            String firstName = dude.getFirstName();
+            String middleName = dude.getMiddleName();
+            String lastName = dude.getLastName();
+            int salary = dude.getSalary();
+
+            String info = "Employee{" +
+                    "firstName='" + firstName + '\'' +
+                    ", middleName='" + middleName + '\'' +
+                    ", lastName='" + lastName + '\'' +
+                    ", salary=" + salary +
+                    '}';
+
+            System.out.println(info);
+        }
+    }
+
+    public static void printEmployeesWithSalaryLess(int refSalary) {
+        for(Employee dude : list) {
+            if(dude.getSalary() < refSalary)
+                System.out.println(dude.getId() + ": " + dude.getFullName() + " with salary less than " + refSalary + ": " + dude.getSalary());
+
+        }
+    }
+
+    public static void printEmployeesWithSalaryBigger(int refSalary) {
+        for(Employee dude : list) {
+            if(dude.getSalary() >= refSalary)
+                System.out.println(dude.getId() + ": " + dude.getFullName() + " with salary bigger than " + refSalary + ": " + dude.getSalary());
+        }
     }
 }
