@@ -49,6 +49,16 @@ public class Main {
         printEmployeesWithSalaryLess(10000);
 
         printEmployeesWithSalaryBigger(20000);
+
+        // Ultra-violence :)
+
+        EmployeeBook book = new EmployeeBook(20, list);
+        book.removeEmplooyee(1);
+        book.addEmplooyee(new Employee("Bill", "Microsoft", "Gates", 1000000, 1));
+        book.editEmployee("Ivanov1 Ivan Petrovich", null, 5);
+        book.printInfoPerDepartment();
+        for(String f : book.getFullNames())
+            System.out.println(f);
     }
 
     public static void printEmployees(Employee list[]) {

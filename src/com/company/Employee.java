@@ -40,7 +40,7 @@ public class Employee {
     }
 
     public String getFullName() {
-        return lastName + " " + middleName + " " + firstName;
+        return lastName + " " + firstName + " " + middleName;
     }
 
     public void setSalary(int salary) {
