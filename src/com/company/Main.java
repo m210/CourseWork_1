@@ -7,6 +7,8 @@ public class Main {
     public static Employee list[] = new Employee[10];
 
     public static void main(String[] args) {
+        System.out.println("\tBasic level:\n");
+
         list[0] = new Employee("Ivan", "Petrovich", "Ivanov1", 10000, 1);
         list[1] = new Employee("Ivan", "Sidorovich", "Petrov1", 12000, 2);
         list[2] = new Employee("Ivan", "Ivanovich", "Sidorov1", 15000, 3);
@@ -32,15 +34,17 @@ public class Main {
         for(String n : names)
             System.out.println(n);
 
+        System.out.println("\n\tMiddle level:\n");
+
         indexSalary(list, 10);
 
-        System.out.println("Сумма затрат на зарплаты в месяц по отделу: " + getSalariesSumInDep(1));
+        System.out.println("Сумма затрат на зарплаты в месяц по отделу 1: " + getSalariesSumInDep(1));
 
-        System.out.println("Минимальная зарплата в месяц по отделу: " + getMinimumSalaryInDep(1));
+        System.out.println("Минимальная зарплата в месяц по отделу 1: " + getMinimumSalaryInDep(1));
 
-        System.out.println("Максимальная зарплата в месяц по отделу: " + getMaximumSalaryInDep(1));
+        System.out.println("Максимальная зарплата в месяц по отделу 1: " + getMaximumSalaryInDep(1));
 
-        System.out.println("Средняя зарплата в месяц по отделу: " +  getAverageSalaryInDep(1));
+        System.out.println("Средняя зарплата в месяц по отделу 1: " +  getAverageSalaryInDep(1));
 
         indexSalaryInDep( 2, -10);
 
@@ -50,15 +54,30 @@ public class Main {
 
         printEmployeesWithSalaryBigger(20000);
 
-        // Ultra-violence :)
+        System.out.println("\n\tUltra-violence difficult:\n");
 
         EmployeeBook book = new EmployeeBook(20, list);
         book.removeEmplooyee(1);
         book.addEmplooyee(new Employee("Bill", "Microsoft", "Gates", 1000000, 1));
         book.editEmployee("Ivanov1 Ivan Petrovich", null, 5);
         book.printInfoPerDepartment();
-        for(String f : book.getFullNames())
-            System.out.println(f);
+        for(String f : book.getFullNames()) {
+            if(f != null)
+                System.out.println(f);
+        }
+
+        book.removeEmplooyee(id - 1);
+        book.editEmployee("Ivanov1 Ivan Petrovich", null, 1);
+        book.addEmplooyee(list[1]);
+        book.printEmployees();
+
+        System.out.println("(EmployeeBook) Сумма затрат на зарплаты в месяц: " + book.getSalariesSum());
+
+        System.out.println("(EmployeeBook) Минимальная зарплата в месяц: " + book.getMinimumSalary());
+
+        System.out.println("(EmployeeBook) Максимальная зарплата в месяц: " + book.getMaximumSalary());
+
+        System.out.println("(EmployeeBook) Средняя зарплата в месяц: " +  book.getAverageSalary());
     }
 
     public static void printEmployees(Employee list[]) {
@@ -152,6 +171,8 @@ public class Main {
     }
 
     public static void printEmployeesInfo(int department) {
+        System.out.println("Список сотрудников в отделе 1: ");
+
         for(Employee dude : getDudes(list, department)) {
             String firstName = dude.getFirstName();
             String middleName = dude.getMiddleName();
@@ -166,7 +187,7 @@ public class Main {
                     ", salary=" + salary +
                     '}';
 
-            System.out.println(info);
+            System.out.println("\t" + info);
         }
     }
 

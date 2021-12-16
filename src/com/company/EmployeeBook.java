@@ -60,7 +60,7 @@ public class EmployeeBook {
 
     public void printInfoPerDepartment() {
         for(int depNum = 1; depNum <= 5; depNum++) {
-            System.out.println("Список сотрудников в отделе " + depNum);
+            System.out.println("Список сотрудников в отделе " + depNum + ": ");
             printEmployees(getDudes(list, depNum));
         }
     }
@@ -116,6 +116,17 @@ public class EmployeeBook {
         indexSalary(getDudes(list, department), percent);
     }
 
+    public void indexSalary(int percent) {
+        for(Employee dude : list) {
+            if(dude == null)
+                continue;
+
+            int salary = dude.getSalary();
+            salary += salary * (percent) / 100;
+            dude.setSalary(salary);
+        }
+    }
+
     public void printEmployeesInfo(int department) {
         for(Employee dude : getDudes(list, department)) {
             if(dude == null)
@@ -164,7 +175,7 @@ public class EmployeeBook {
             if(list[i] == null)
                 continue;
 
-            System.out.println(list[i].toString());
+            System.out.println("\t" + list[i].toString());
         }
     }
 
@@ -187,6 +198,16 @@ public class EmployeeBook {
                 return i;
         }
         return -1;
+    }
+
+    private int getLength(Employee list[]) {
+        int i = 0;
+        int len = 0;
+        for (; i < list.length; i++) {
+            if(list[i] != null)
+                len++;
+        }
+        return len;
     }
 
     private int getMinimumSalary(Employee list[]) {
@@ -222,7 +243,7 @@ public class EmployeeBook {
     }
 
     private float getAverageSalary(Employee list[]) {
-        return getSalariesSum(list) / (float) list.length;
+        return getSalariesSum(list) / (float) getLength(list);
     }
 
     private void indexSalary(Employee list[], int percent) {
