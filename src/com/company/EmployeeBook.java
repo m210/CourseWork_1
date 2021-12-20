@@ -10,18 +10,22 @@ public class EmployeeBook {
     }
 
     public boolean addEmplooyee(Employee dude) {
+        /*
+        В этом весь и прикол, если свободной ячейки не найдено, тогда i == 20 и
+        соответственно добавлять новый элемент некуда, а если свободный элемент доступен
+        по максимально возможному значению, тогда list.length - 1 все же меньше чем list.length.
+        А вообще, я не знаю, зачем я написал именно такую логику,
+        лучше перепишу ее на менее противоречивую)))
+         */
         int i = 0;
         while(i < list.length) {
-            if(list[i] == null)
-                break;
+            if(list[i] == null) {
+                list[i] = dude;
+                return true;
+            }
 
             if(list[i++].equals(dude))
                 return false;
-        }
-
-        if(i < list.length) {
-            list[i] = dude;
-            return true;
         }
         return false;
     }
@@ -61,7 +65,7 @@ public class EmployeeBook {
     public void printInfoPerDepartment() {
         for(int depNum = 1; depNum <= 5; depNum++) {
             System.out.println("Список сотрудников в отделе " + depNum + ": ");
-            printEmployees(getDudes(list, depNum));
+            printEmployees(getDudesInDepartment(list, depNum));
         }
     }
 
@@ -69,16 +73,16 @@ public class EmployeeBook {
         printEmployees(list);
     }
 
-    public int getSalariesSum() {
+    public float getSalariesSum() {
         return getSalariesSum(list);
     }
 
-    public int getMinimumSalary() {
-        return getMinimumSalary(list);
+    public Employee getWithMinimumSalary() {
+        return getWithMinimumSalary(list);
     }
 
-    public int getMaximumSalary() {
-        return getMaximumSalary(list);
+    public Employee getWithMaximumSalary() {
+        return getWithMaximumSalary(list);
     }
 
     public float getAverageSalary() {
@@ -96,24 +100,24 @@ public class EmployeeBook {
         return names;
     }
 
-    public int getMinimumSalaryInDep(int department) {
-        return getMinimumSalary(getDudes(list, department));
+    public Employee getWithMinimumSalaryInDep(int department) {
+        return getWithMinimumSalary(getDudesInDepartment(list, department));
     }
 
-    public int getMaximumSalaryInDep(int department) {
-        return getMaximumSalary(getDudes(list, department));
+    public Employee getWithMaximumSalaryInDep(int department) {
+        return getWithMaximumSalary(getDudesInDepartment(list, department));
     }
 
     public float getAverageSalaryInDep(int department) {
-        return getAverageSalary(getDudes(list, department));
+        return getAverageSalary(getDudesInDepartment(list, department));
     }
 
     public int getSalariesSumInDep(int department) {
-        return getSalariesSum(getDudes(list, department));
+        return getSalariesSum(getDudesInDepartment(list, department));
     }
 
     public void indexSalaryInDep(int department, int percent) {
-        indexSalary(getDudes(list, department), percent);
+        indexSalary(getDudesInDepartment(list, department), percent);
     }
 
     public void indexSalary(int percent) {
@@ -121,21 +125,21 @@ public class EmployeeBook {
             if(dude == null)
                 continue;
 
-            int salary = dude.getSalary();
+            float salary = dude.getSalary();
             salary += salary * (percent) / 100;
             dude.setSalary(salary);
         }
     }
 
     public void printEmployeesInfo(int department) {
-        for(Employee dude : getDudes(list, department)) {
+        for(Employee dude : getDudesInDepartment(list, department)) {
             if(dude == null)
                 continue;
 
             String firstName = dude.getFirstName();
             String middleName = dude.getMiddleName();
             String lastName = dude.getLastName();
-            int salary = dude.getSalary();
+            float salary = dude.getSalary();
 
             String info = "Employee{" +
                     "id=" + dude.getId() +
@@ -175,7 +179,7 @@ public class EmployeeBook {
             if(list[i] == null)
                 continue;
 
-            System.out.println("\t" + list[i].toString());
+            System.out.println("\t" + list[i]);
         }
     }
 
@@ -210,36 +214,42 @@ public class EmployeeBook {
         return len;
     }
 
-    private int getMinimumSalary(Employee list[]) {
+    private Employee getWithMinimumSalary(Employee list[]) {
         int first = getFirst();
         if(first == -1)
-            return 0;
+            return null;
 
-        int min = list[first].getSalary();
+        Employee ret = list[first];
+        float min = list[first].getSalary();
         for (int i = first + 1; i < list.length; i++) {
             if(list[i] == null)
                 continue;
 
-            if(min > list[i].getSalary())
+            if(min > list[i].getSalary()) {
                 min = list[i].getSalary();
+                ret = list[i];
+            }
         }
-        return min;
+        return ret;
     }
 
-    private int getMaximumSalary(Employee list[]) {
+    private Employee getWithMaximumSalary(Employee list[]) {
         int first = getFirst();
         if(first == -1)
-            return 0;
+            return null;
 
-        int max = list[first].getSalary();
+        Employee ret = list[first];
+        float max = list[first].getSalary();
         for (int i = first + 1; i < list.length; i++) {
             if(list[i] == null)
                 continue;
 
-            if(max < list[i].getSalary())
+            if(max < list[i].getSalary()) {
                 max = list[i].getSalary();
+                ret = list[i];
+            }
         }
-        return max;
+        return ret;
     }
 
     private float getAverageSalary(Employee list[]) {
@@ -251,13 +261,13 @@ public class EmployeeBook {
             if(dude == null)
                 continue;
 
-            int salary = dude.getSalary();
+            float salary = dude.getSalary();
             salary += salary * (percent) / 100;
             dude.setSalary(salary);
         }
     }
 
-    private Employee[] getDudes(Employee list[], int department) {
+    private Employee[] getDudesInDepartment(Employee list[], int department) {
         int size = 0;
         for(Employee dude : list) {
             if(dude != null && dude.getDepartment() == department)

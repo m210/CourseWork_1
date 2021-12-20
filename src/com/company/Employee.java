@@ -1,9 +1,13 @@
 package com.company;
 
 public class Employee {
-    private String firstName, middleName, lastName;
-    private int salary, department;
-    private int id;
+    private final String firstName;
+    private final String middleName;
+    private final String lastName;
+    private float salary;
+    private int department;
+    private final int id;
+    public static int staticid = 0;
 
     public Employee(String firstName, String middleName, String lastName, int salary, int department) {
         this.firstName = firstName;
@@ -12,10 +16,10 @@ public class Employee {
         this.salary = salary;
         this.department = department;
 
-        this.id = Main.id++;
+        this.id = staticid++;
     }
 
-    public int getSalary() {
+    public float getSalary() {
         return salary;
     }
 
@@ -43,7 +47,7 @@ public class Employee {
         return lastName + " " + firstName + " " + middleName;
     }
 
-    public void setSalary(int salary) {
+    public void setSalary(float salary) {
         this.salary = salary;
     }
 

@@ -2,8 +2,6 @@ package com.company;
 
 public class Main {
 
-    public static int id = 0;
-
     public static Employee list[] = new Employee[10];
 
     public static void main(String[] args) {
@@ -24,9 +22,9 @@ public class Main {
 
         System.out.println("Сумма затрат на зарплаты в месяц: " + getSalariesSum(list));
 
-        System.out.println("Минимальная зарплата в месяц: " + getMinimumSalary(list));
+        System.out.println("Сотрудник с минимальной зарплатой в месяц: " + getWithMinimumSalary(list));
 
-        System.out.println("Максимальная зарплата в месяц: " + getMaximumSalary(list));
+        System.out.println("Сотрудник с максимальной зарплатой в месяц: " + getWithMaximumSalary(list));
 
         System.out.println("Средняя зарплата в месяц: " +  getAverageSalary(list));
 
@@ -66,23 +64,23 @@ public class Main {
                 System.out.println(f);
         }
 
-        book.removeEmplooyee(id - 1);
+        book.removeEmplooyee(Employee.staticid - 1);
         book.editEmployee("Ivanov1 Ivan Petrovich", null, 1);
         book.addEmplooyee(list[1]);
         book.printEmployees();
 
         System.out.println("(EmployeeBook) Сумма затрат на зарплаты в месяц: " + book.getSalariesSum());
 
-        System.out.println("(EmployeeBook) Минимальная зарплата в месяц: " + book.getMinimumSalary());
+        System.out.println("(EmployeeBook) Сотрудник с минимальной зарплатой в месяц: " + book.getWithMinimumSalary());
 
-        System.out.println("(EmployeeBook) Максимальная зарплата в месяц: " + book.getMaximumSalary());
+        System.out.println("(EmployeeBook) Сотрудник с максимальной зарплатой в месяц: " + book.getWithMaximumSalary());
 
         System.out.println("(EmployeeBook) Средняя зарплата в месяц: " +  book.getAverageSalary());
     }
 
     public static void printEmployees(Employee list[]) {
         for (int i = 0; i < list.length; i++) {
-            System.out.println(list[i].toString());
+            System.out.println(list[i]);
         }
     }
 
@@ -95,22 +93,28 @@ public class Main {
         return sum;
     }
 
-    public static int getMinimumSalary(Employee list[]) {
-        int min = list[0].getSalary();
+    public static Employee getWithMinimumSalary(Employee list[]) {
+        Employee ret = list[0];
+        float min = list[0].getSalary();
         for (int i = 1; i < list.length; i++) {
-            if(min > list[i].getSalary())
+            if(min > list[i].getSalary()) {
                 min = list[i].getSalary();
+                ret = list[i];
+            }
         }
-        return min;
+        return ret;
     }
 
-    public static int getMaximumSalary(Employee list[]) {
-        int max = list[0].getSalary();
+    public static Employee getWithMaximumSalary(Employee list[]) {
+        Employee ret = list[0];
+        float max = list[0].getSalary();
         for (int i = 1; i < list.length; i++) {
-            if(max < list[i].getSalary())
+            if(max < list[i].getSalary()) {
                 max = list[i].getSalary();
+                ret = list[i];
+            }
         }
-        return max;
+        return ret;
     }
 
     public static float getAverageSalary(Employee list[]) {
@@ -127,13 +131,13 @@ public class Main {
 
     public static void indexSalary(Employee list[], int percent) {
         for(Employee dude : list) {
-            int salary = dude.getSalary();
+            float salary = dude.getSalary();
             salary += salary * (percent) / 100;
             dude.setSalary(salary);
         }
     }
 
-    public static Employee[] getDudes(Employee list[], int department) {
+    public static Employee[] getDudesInDepartment(Employee list[], int department) {
         int size = 0;
         for(Employee dude : list) {
             if(dude.getDepartment() == department)
@@ -150,34 +154,34 @@ public class Main {
         return dudes;
     }
 
-    public static int getMinimumSalaryInDep(int department) {
-        return getMinimumSalary(getDudes(list, department));
+    public static Employee getMinimumSalaryInDep(int department) {
+        return getWithMinimumSalary(getDudesInDepartment(list, department));
     }
 
-    public static int getMaximumSalaryInDep(int department) {
-        return getMaximumSalary(getDudes(list, department));
+    public static Employee getMaximumSalaryInDep(int department) {
+        return getWithMaximumSalary(getDudesInDepartment(list, department));
     }
 
     public static float getAverageSalaryInDep(int department) {
-        return getAverageSalary(getDudes(list, department));
+        return getAverageSalary(getDudesInDepartment(list, department));
     }
 
     public static int getSalariesSumInDep(int department) {
-        return getSalariesSum(getDudes(list, department));
+        return getSalariesSum(getDudesInDepartment(list, department));
     }
 
     public static void indexSalaryInDep(int department, int percent) {
-        indexSalary(getDudes(list, department), percent);
+        indexSalary(getDudesInDepartment(list, department), percent);
     }
 
     public static void printEmployeesInfo(int department) {
         System.out.println("Список сотрудников в отделе 1: ");
 
-        for(Employee dude : getDudes(list, department)) {
+        for(Employee dude : getDudesInDepartment(list, department)) {
             String firstName = dude.getFirstName();
             String middleName = dude.getMiddleName();
             String lastName = dude.getLastName();
-            int salary = dude.getSalary();
+            float salary = dude.getSalary();
 
             String info = "Employee{" +
                     "id=" + dude.getId() +
